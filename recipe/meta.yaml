@@ -18,9 +18,10 @@ build:
 
 requirements:
   build:
-    - python
+    - python >=3.6
     - setuptools
     - pip
+    - wheel
 
   run:
     - aiohttp >=3.6.2,<4.0.0dev

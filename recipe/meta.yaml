@@ -25,6 +25,7 @@ requirements:
 
   run:
     - aiohttp >=3.6.2,<4.0.0dev
+    - requests >= 2.20.0,< 3.0.0dev
     - python >=3.6
     - cachetools >=2.0.0,<5.0
     - pyasn1-modules >=0.2.1

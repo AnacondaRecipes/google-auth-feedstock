@@ -41,6 +41,8 @@ test:
     - google.auth
   commands:
     - python -m pip check
+  downstreams:
+    - google-cloud-storage
 
 about:
   home: https://github.com/googleapis/google-auth-library-python

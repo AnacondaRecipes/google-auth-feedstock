@@ -18,13 +18,13 @@ build:
 
 requirements:
   host:
-    - python >=3.6
+    - python
     - setuptools
     - pip
     - wheel
   run:
     - python >=3.6
-    - cachetools >=2.0.0,<5.0
+    - cachetools >=2.0.0,<6.0
     - pyasn1-modules >=0.2.1
     - rsa >=3.1.4,<5
     - setuptools >=40.3.0
@@ -36,7 +36,6 @@ requirements:
 
 test:
   requires:
-    - python
     - pip
   imports:
     - google.auth

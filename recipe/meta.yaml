@@ -31,7 +31,7 @@ requirements:
     - aiohttp >=3.6.2,<4.0.0dev
     - requests >=2.20.0,<3.0.0dev
     - pyopenssl >=20.0.0
-    run_constrained:
+  run_constrained:
     - cryptography >=38.0.3
     # 2023/9/7: pyu2f isn't available on defaults yet
     - pyu2f >=0.1.5

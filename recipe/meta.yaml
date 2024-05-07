@@ -51,9 +51,9 @@ about:
   license_file: LICENSE
   summary: Google authentication library for Python
   description: |
-    This library provides the ability to authenticate to Google APIs using various methods. 
+    This library provides the ability to authenticate to Google APIs using various methods.
     It also provides integration with several HTTP libraries.
-  doc_url: https://google-auth.readthedocs.io/en/latest/
+  doc_url: https://google-auth.readthedocs.io
   dev_url: https://github.com/googleapis/google-auth-library-python
 
 extra:

@@ -26,15 +26,14 @@ requirements:
     - pyasn1-modules >=0.2.1
     - rsa >=3.1.4,<5
     # extras: keep them in run to avoid breaking environments
-    - aiohttp >=3.6.2,<4.0.0dev
-    - requests >=2.20.0,<3.0.0.dev
+    - aiohttp >=3.6.2,<4.0.0.dev0
+    - requests >=2.20.0,<3.0.0.dev0
     - pyopenssl >=20.0.0
   run_constrained:
     - cryptography >=38.0.3
     # 2023/9/7: pyu2f isn't available on defaults yet
     - pyu2f >=0.1.5
     - pyjwt >=2.0
-    - cryptography >=38.0.3
 
 #aioresponses =* * does not exist (perhaps a typo or a missing channel);
 {% set ignore_tests = " --ignore=tests/transport/aio/test_sessions.py" %}

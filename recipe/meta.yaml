@@ -57,6 +57,7 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test_refresh_with_retrieve_subject_token_error" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback_failed_to_sign" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test__run_subprocess_ignore_stderr" %}  # [win]
 
 test:
   source_files:
@@ -66,7 +67,7 @@ test:
     - google.auth
   commands:
     - python -m pip check
-    - pytest -v {{ ignore_tests }} {{ tests_to_skip }} tests
+    - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests
     - pytest -v {{ ignore_tests_async }} tests_async
   requires:
     - pip

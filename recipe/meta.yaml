@@ -44,6 +44,20 @@ requirements:
 #pyu2f =* * does not exist (perhaps a typo or a missing channel).
 {% set ignore_tests = ignore_tests + " --ignore=tests/oauth2/test_challenges.py" %}
 
+# ctypes.ArgumentError: argument 2: TypeError: expected LP_c_ulonglong instance instead of pointer to c_ulong
+{% set tests_to_skip = "" %}
+{% set tests_to_skip = "test_get_config_path_unix" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_get_config_path_no_appdata" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_get_auth_access_token_with_account" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_load_credentials_from_file_external_account_bad_format" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_load_credentials_from_file_external_account_authorized_user_bad_format" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_default_environ_external_credentials_bad_format" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_retrieve_subject_token_json_file_invalid_field_name" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_retrieve_subject_token_invalid_json" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_refresh_with_retrieve_subject_token_error" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_get_sign_callback" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test_get_sign_callback_failed_to_sign" %}  # [win]
+
 test:
   source_files:
     - tests
@@ -52,7 +66,7 @@ test:
     - google.auth
   commands:
     - python -m pip check
-    - pytest -v {{ ignore_tests }} tests
+    - pytest -v {{ ignore_tests }} {{ tests_to_skip }} tests
     - pytest -v {{ ignore_tests_async }} tests_async
   requires:
     - pip

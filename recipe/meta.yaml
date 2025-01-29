@@ -1,13 +1,13 @@
 {% set name = "google-auth" %}
-{% set version = "2.29.0" %}
+{% set version = "2.38.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 672dff332d073227550ffc7457868ac4218d6c500b155fe6cc17d2b13602c360
+  url: https://github.com/googleapis/{{ name }}-library-python/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 7e53bdb219759a67ab6a46dc8bd0d860f84ba2172fe6b82b91478776aca6b01f
 
 build:
   number: 0
@@ -27,20 +27,43 @@ requirements:
     - rsa >=3.1.4,<5
     # extras: keep them in run to avoid breaking environments
     - aiohttp >=3.6.2,<4.0.0dev
-    - requests >=2.20.0,<3.0.0dev
+    - requests >=2.20.0,<3.0.0.dev
     - pyopenssl >=20.0.0
   run_constrained:
     - cryptography >=38.0.3
     # 2023/9/7: pyu2f isn't available on defaults yet
     - pyu2f >=0.1.5
+    - pyjwt >=2.0
+    - cryptography >=38.0.3
+
+#aioresponses =* * does not exist (perhaps a typo or a missing channel);
+{% set ignore_tests = " --ignore=tests/transport/aio/test_sessions.py" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/transport/aio/test_aiohttp.py" %}
+{% set ignore_tests_async = " --ignore=tests_async/transport/test_aiohttp_requests.py" %}
+
+#pyu2f =* * does not exist (perhaps a typo or a missing channel).
+{% set ignore_tests = ignore_tests + " --ignore=tests/oauth2/test_challenges.py" %}
 
 test:
-  requires:
-    - pip
+  source_files:
+    - tests
+    - tests_async
   imports:
     - google.auth
   commands:
     - python -m pip check
+    - pytest -v {{ ignore_tests }} tests
+    - pytest -v {{ ignore_tests_async }} tests_async
+  requires:
+    - pip
+    - pytest
+    - pytest-localserver
+    - mock
+    - responses
+    - flask
+    - freezegun
+    - flask
+    - pyjwt >=2.0
   downstreams:
     - google-cloud-storage
 

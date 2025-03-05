@@ -8,9 +8,16 @@ package:
 source:
   url: https://github.com/googleapis/{{ name }}-library-python/archive/refs/tags/v{{ version }}.tar.gz
   sha256: 7e53bdb219759a67ab6a46dc8bd0d860f84ba2172fe6b82b91478776aca6b01f
+  patches:
+    # The 'google-auth 2.38.0' tests/transport/test__mtls_helper.py failed
+    # with the AttributeError: module 'OpenSSL.crypto' has no attribute 'sign',
+    # because pyopenssl >=24.3.0 removed the OpenSSL.crypto.sign function, see https://github.com/googleapis/google-auth-library-python/issues/1665.
+    # Apply a patch to fix the test.
+    # Remove the patch when the issue will be fixed https://github.com/googleapis/google-auth-library-python/issues/1665
+    - 0001-fix-removed-OpenSSL-crypto-sign-function.patch
 
 build:
-  number: 0
+  number: 1
   skip: True  # [py<37]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
@@ -66,7 +73,7 @@ test:
   commands:
     - python -m pip check
 
-    - pytest -v {{ ignore_tests }} tests  # [not win]
+    - pytest -v {{ ignore_tests }} tests                                 # [not win]
     - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests  # [win]
 
     - pytest -v {{ ignore_tests_async }} tests_async

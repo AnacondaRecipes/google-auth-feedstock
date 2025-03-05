@@ -1,0 +1,55 @@
+From 9fade1dfc9dd8eb54da3872efd426288797ae718 Mon Sep 17 00:00:00 2001
+From: Serhii Kupriienko
+Date: Wed, 5 Mar 2025 13:41:00 +0200
+Subject: [PATCH] Fix the removed OpenSSL.crypto.sign function
+
+---
+ tests/transport/test__mtls_helper.py | 32 +++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 8 deletions(-)
+
+diff --git a/tests/transport/test__mtls_helper.py b/tests/transport/test__mtls_helper.py
+index f6e20b7..0c97f71 100644
+--- a/tests/transport/test__mtls_helper.py
++++ b/tests/transport/test__mtls_helper.py
+@@ -624,14 +624,30 @@ class TestDecryptPrivateKey(object):
+         decrypted_key = _mtls_helper.decrypt_private_key(
+             ENCRYPTED_EC_PRIVATE_KEY, PASSPHRASE_VALUE
+         )
+-        private_key = crypto.load_privatekey(crypto.FILETYPE_PEM, decrypted_key)
+-        public_key = crypto.load_publickey(crypto.FILETYPE_PEM, EC_PUBLIC_KEY)
+-        x509 = crypto.X509()
+-        x509.set_pubkey(public_key)
+-
+-        # Test the decrypted key works by signing and verification.
+-        signature = crypto.sign(private_key, b"data", "sha256")
+-        crypto.verify(x509, signature, b"data", "sha256")
++
++        # Use the cryptography library directly for signing and verification
++        from cryptography.hazmat.primitives.serialization import load_pem_private_key
++        from cryptography.hazmat.primitives.serialization import load_pem_public_key
++        from cryptography.hazmat.primitives import hashes
++        from cryptography.hazmat.primitives.asymmetric import ec, padding, utils
++
++        # Load the private key from the decrypted PEM data
++        priv_key = load_pem_private_key(decrypted_key, password=None)
++        # Load the public key from the PEM data
++        pub_key = load_pem_public_key(EC_PUBLIC_KEY)
++
++        # Sign some data with appropriate algorithm based on key type
++        data = b"data"
++
++        # Determine the signing mechanism based on key type
++        if isinstance(priv_key, ec.EllipticCurvePrivateKey):
++            # For EC keys
++            signature = priv_key.sign(data, ec.ECDSA(hashes.SHA256()))
++            pub_key.verify(signature, data, ec.ECDSA(hashes.SHA256()))
++        else:
++            # For RSA keys (assuming that's the alternative)
++            signature = priv_key.sign(data, padding.PKCS1v15(), hashes.SHA256())
++            pub_key.verify(signature, data, padding.PKCS1v15(), hashes.SHA256())
+ 
+     def test_crypto_error(self):
+         with pytest.raises(crypto.Error):
+-- 
+2.48.1
+

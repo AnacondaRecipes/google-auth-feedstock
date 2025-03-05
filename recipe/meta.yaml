@@ -46,6 +46,7 @@ requirements:
 #pyu2f =* * does not exist (perhaps a typo or a missing channel).
 {% set ignore_tests = ignore_tests + " --ignore=tests/oauth2/test_challenges.py" %}
 
+{% set tests_to_skip = "" %}
 # ctypes.ArgumentError: argument 2: TypeError: expected LP_c_ulonglong instance instead of pointer to c_ulong
 {% set tests_to_skip = "test_get_config_path_unix" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test_get_config_path_no_appdata" %}  # [win]

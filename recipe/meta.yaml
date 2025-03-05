@@ -8,13 +8,6 @@ package:
 source:
   url: https://github.com/googleapis/{{ name }}-library-python/archive/refs/tags/v{{ version }}.tar.gz
   sha256: 7e53bdb219759a67ab6a46dc8bd0d860f84ba2172fe6b82b91478776aca6b01f
-  patches:
-    # The 'google-auth 2.38.0' tests/transport/test__mtls_helper.py failed
-    # with the AttributeError: module 'OpenSSL.crypto' has no attribute 'sign',
-    # because pyopenssl >=24.3.0 removed the OpenSSL.crypto.sign function, see https://github.com/googleapis/google-auth-library-python/issues/1665.
-    # Apply a patch to fix the test.
-    # Remove the patch when the issue will be fixed https://github.com/googleapis/google-auth-library-python/issues/1665
-    - 0001-fix-removed-OpenSSL-crypto-sign-function.patch
 
 build:
   number: 1
@@ -66,6 +59,11 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback_failed_to_sign" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test__run_subprocess_ignore_stderr" %}  # [win]
+
+# 'google-auth 2.38.0' `tests/transport/test__mtls_helper.py` failed with the `AttributeError: module 'OpenSSL.crypto' has no attribute 'sign'`. 
+# See also the upstream issue  https://github.com/googleapis/google-auth-library-python/issues/1665,
+# because because pyopenssl >=24.3.0 removed the `OpenSSL.crypto.sign` function, see https://github.com/googleapis/google-auth-library-python/issues/1665
+{% set tests_to_skip = tests_to_skip + " or test__mtls_helper" %}
 
 test:
   source_files:

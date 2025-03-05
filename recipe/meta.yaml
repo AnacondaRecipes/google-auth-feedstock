@@ -61,7 +61,7 @@ requirements:
 # 'google-auth 2.38.0' `tests/transport/test__mtls_helper.py` failed with the `AttributeError: module 'OpenSSL.crypto' has no attribute 'sign'`. 
 # See also the upstream issue  https://github.com/googleapis/google-auth-library-python/issues/1665,
 # because because pyopenssl >=24.3.0 removed the `OpenSSL.crypto.sign` function, see https://github.com/googleapis/google-auth-library-python/issues/1665
-{% set tests_to_skip = tests_to_skip + " or TestDecryptPrivateKey::test_success" %}
+{% set tests_to_skip = tests_to_skip + " or test_success" %}
 
 test:
   source_files:

@@ -40,6 +40,12 @@ requirements:
 {% set ignore_tests = ignore_tests + " --ignore=tests/transport/aio/test_aiohttp.py" %}
 {% set ignore_tests_async = " --ignore=tests_async/transport/test_aiohttp_requests.py" %}
 
+# 'google-auth 2.38.0' `tests/transport/test__mtls_helper.py` failed with the `AttributeError: module 'OpenSSL.crypto' has no attribute 'sign'`. 
+# See also the upstream issue  https://github.com/googleapis/google-auth-library-python/issues/1665,
+# because because pyopenssl >=24.3.0 removed the `OpenSSL.crypto.sign` function, see https://github.com/googleapis/google-auth-library-python/issues/1665
+{% set ignore_tests = ignore_tests + " --ignore=tests/transport/test__mtls_helper.py" %}
+
+
 #pyu2f =* * does not exist (perhaps a typo or a missing channel).
 {% set ignore_tests = ignore_tests + " --ignore=tests/oauth2/test_challenges.py" %}
 
@@ -58,10 +64,6 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback_failed_to_sign" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test__run_subprocess_ignore_stderr" %}  # [win]
 
-# 'google-auth 2.38.0' `tests/transport/test__mtls_helper.py` failed with the `AttributeError: module 'OpenSSL.crypto' has no attribute 'sign'`. 
-# See also the upstream issue  https://github.com/googleapis/google-auth-library-python/issues/1665,
-# because because pyopenssl >=24.3.0 removed the `OpenSSL.crypto.sign` function, see https://github.com/googleapis/google-auth-library-python/issues/1665
-{% set ignore_tests = ignore_tests + " --ignore=tests/transport/test__mtls_helper.py`" %}
 
 test:
   source_files:

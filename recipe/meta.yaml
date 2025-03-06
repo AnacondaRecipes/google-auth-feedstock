@@ -10,7 +10,7 @@ source:
   sha256: 7e53bdb219759a67ab6a46dc8bd0d860f84ba2172fe6b82b91478776aca6b01f
 
 build:
-  number: 0
+  number: 1
   skip: True  # [py<37]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
@@ -40,9 +40,16 @@ requirements:
 {% set ignore_tests = ignore_tests + " --ignore=tests/transport/aio/test_aiohttp.py" %}
 {% set ignore_tests_async = " --ignore=tests_async/transport/test_aiohttp_requests.py" %}
 
+# 'google-auth 2.38.0' `tests/transport/test__mtls_helper.py` failed with the `AttributeError: module 'OpenSSL.crypto' has no attribute 'sign'`. 
+# See also the upstream issue  https://github.com/googleapis/google-auth-library-python/issues/1665,
+# because because pyopenssl >=24.3.0 removed the `OpenSSL.crypto.sign` function, see https://github.com/googleapis/google-auth-library-python/issues/1665
+{% set ignore_tests = ignore_tests + " --ignore=tests/transport/test__mtls_helper.py" %}
+
+
 #pyu2f =* * does not exist (perhaps a typo or a missing channel).
 {% set ignore_tests = ignore_tests + " --ignore=tests/oauth2/test_challenges.py" %}
 
+{% set tests_to_skip = "" %}
 # ctypes.ArgumentError: argument 2: TypeError: expected LP_c_ulonglong instance instead of pointer to c_ulong
 {% set tests_to_skip = "test_get_config_path_unix" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test_get_config_path_no_appdata" %}  # [win]
@@ -57,6 +64,7 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback_failed_to_sign" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test__run_subprocess_ignore_stderr" %}  # [win]
 
+
 test:
   source_files:
     - tests
@@ -66,7 +74,7 @@ test:
   commands:
     - python -m pip check
 
-    - pytest -v {{ ignore_tests }} tests  # [not win]
+    - pytest -v {{ ignore_tests }} tests                                 # [not win]
     - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests  # [win]
 
     - pytest -v {{ ignore_tests_async }} tests_async

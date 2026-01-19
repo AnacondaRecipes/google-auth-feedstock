@@ -81,6 +81,7 @@ test:
   requires:
     - pip
     - pytest
+    - pytest-asyncio
     - pytest-localserver
     - mock
     - responses

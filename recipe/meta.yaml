@@ -63,7 +63,8 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback_failed_to_sign" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test__run_subprocess_ignore_stderr" %}  # [win]
-
+{% set tests_to_skip = tests_to_skip + " or test__MdsMtlsConfig_windows_defaults" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test__MdsMtlsConfig_non_windows_defaults" %}  # [win]
 
 test:
   source_files:

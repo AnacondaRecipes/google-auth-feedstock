@@ -1,5 +1,5 @@
 {% set name = "google-auth" %}
-{% set version = "2.38.0" %}
+{% set version = "2.47.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://github.com/googleapis/{{ name }}-library-python/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 7e53bdb219759a67ab6a46dc8bd0d860f84ba2172fe6b82b91478776aca6b01f
+  sha256: 6db96de728bfd7451602509234fbf4126da2b80e78bb780cc2a81ee023639d72
 
 build:
-  number: 1
+  number: 0
   skip: True  # [py<37]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 

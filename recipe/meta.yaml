@@ -1,5 +1,5 @@
 {% set name = "google-auth" %}
-{% set version = "2.38.0" %}
+{% set version = "2.47.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://github.com/googleapis/{{ name }}-library-python/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 7e53bdb219759a67ab6a46dc8bd0d860f84ba2172fe6b82b91478776aca6b01f
+  sha256: 6db96de728bfd7451602509234fbf4126da2b80e78bb780cc2a81ee023639d72
 
 build:
-  number: 1
+  number: 0
   skip: True  # [py<37]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
@@ -26,12 +26,12 @@ requirements:
     - pyasn1-modules >=0.2.1
     - rsa >=3.1.4,<5
     # extras: keep them in run to avoid breaking environments
-    - aiohttp >=3.6.2,<4.0.0.dev0
-    - requests >=2.20.0,<3.0.0.dev0
+    - aiohttp >=3.6.2,<4.0.0
+    - requests >=2.20.0,<3.0.0
     - pyopenssl >=20.0.0
   run_constrained:
     - cryptography >=38.0.3
-    # 2023/9/7: pyu2f isn't available on defaults yet
+    # 2026/1/20: pyu2f isn't available on defaults yet
     - pyu2f >=0.1.5
     - pyjwt >=2.0
 
@@ -41,8 +41,8 @@ requirements:
 {% set ignore_tests_async = " --ignore=tests_async/transport/test_aiohttp_requests.py" %}
 
 # 'google-auth 2.38.0' `tests/transport/test__mtls_helper.py` failed with the `AttributeError: module 'OpenSSL.crypto' has no attribute 'sign'`. 
-# See also the upstream issue  https://github.com/googleapis/google-auth-library-python/issues/1665,
-# because because pyopenssl >=24.3.0 removed the `OpenSSL.crypto.sign` function, see https://github.com/googleapis/google-auth-library-python/issues/1665
+# See also the upstream issue  https://github.com/googleapis/google-cloud-python/issues/15169,
+# because because pyopenssl >=24.3.0 removed the `OpenSSL.crypto.sign` function, see https://github.com/googleapis/google-cloud-python/issues/15169
 {% set ignore_tests = ignore_tests + " --ignore=tests/transport/test__mtls_helper.py" %}
 
 
@@ -63,7 +63,8 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test_get_sign_callback_failed_to_sign" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test__run_subprocess_ignore_stderr" %}  # [win]
-
+{% set tests_to_skip = tests_to_skip + " or test__MdsMtlsConfig_windows_defaults" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or test__MdsMtlsConfig_non_windows_defaults" %}  # [win]
 
 test:
   source_files:
@@ -71,6 +72,7 @@ test:
     - tests_async
   imports:
     - google.auth
+    - google.oauth2
   commands:
     - python -m pip check
 
@@ -81,6 +83,7 @@ test:
   requires:
     - pip
     - pytest
+    - pytest-asyncio
     - pytest-localserver
     - mock
     - responses

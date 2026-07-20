@@ -38,7 +38,6 @@ requirements:
 #aioresponses =* * does not exist (perhaps a typo or a missing channel);
 {% set ignore_tests = " --ignore=tests/transport/aio/test_sessions.py" %}
 {% set ignore_tests = ignore_tests + " --ignore=tests/transport/aio/test_aiohttp.py" %}
-{% set ignore_tests_async = " --ignore=tests_async/transport/test_aiohttp_requests.py" %}
 
 #pyu2f =* * does not exist (perhaps a typo or a missing channel).
 {% set ignore_tests = ignore_tests + " --ignore=tests/oauth2/test_challenges.py" %}
@@ -63,7 +62,6 @@ requirements:
 test:
   source_files:
     - tests
-    - tests_async
   imports:
     - google.auth
     - google.oauth2
@@ -72,8 +70,6 @@ test:
 
     - pytest -v {{ ignore_tests }} tests                                 # [not win]
     - pytest -v {{ ignore_tests }} -k "not ({{ tests_to_skip }})" tests  # [win]
-
-    - pytest -v {{ ignore_tests_async }} tests_async
   requires:
     - pip
     - pytest

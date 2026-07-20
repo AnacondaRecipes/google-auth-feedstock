@@ -36,8 +36,7 @@ requirements:
     - pyjwt >=2.0
 
 #aioresponses =* * does not exist (perhaps a typo or a missing channel);
-{% set ignore_tests = " --ignore=tests/transport/aio/test_sessions.py" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/transport/aio/test_aiohttp.py" %}
+{% set ignore_tests = " --ignore=tests/transport/aio" %}
 
 #pyu2f =* * does not exist (perhaps a typo or a missing channel).
 {% set ignore_tests = ignore_tests + " --ignore=tests/oauth2/test_challenges.py" %}

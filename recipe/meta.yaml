@@ -25,8 +25,8 @@ requirements:
     - pyasn1-modules >=0.2.1
     - cryptography >=38.0.3  # [py<314]
     - cryptography >=41.0.5  # [py>=314]
-    - rsa >=4.0.0,<5
     # extras: keep them in run to avoid breaking environments
+    - rsa >=4.0.0,<5
     - aiohttp >=3.8.0,<4.0.0  # [py<314]
     - aiohttp >=3.9.0,<4.0.0  # [py>=314]
     - requests >=2.30.0,<3.0.0
@@ -79,7 +79,6 @@ test:
     - responses
     - flask
     - freezegun
-    - flask
     - pyjwt >=2.0
   downstreams:
     - google-cloud-storage

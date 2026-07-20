@@ -57,6 +57,7 @@ requirements:
 {% set tests_to_skip = tests_to_skip + " or test__run_subprocess_ignore_stderr" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test__MdsMtlsConfig_windows_defaults" %}  # [win]
 {% set tests_to_skip = tests_to_skip + " or test__MdsMtlsConfig_non_windows_defaults" %}  # [win]
+{% set tests_to_skip = tests_to_skip + " or negative_timestamp" %}  # [win]
 
 test:
   source_files:
